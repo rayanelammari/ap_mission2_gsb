@@ -34,13 +34,25 @@ class PdoGsb{
  * @param $mdp
  * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
 */
-	public function getInfosVisiteur($login, $mdp){
-		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-        where visiteur.login='" . $login . "' and visiteur.mdp='" . $mdp ."'";
+	public function getInfosGestionnaire($login, $mdp){
+		$req = "select gestionnaire.id as id, gestionnaire.nom as nom, gestionnaire.prenom as prenom from gestionnaire 
+        where gestionnaire.login='" . $login . "' and gestionnaire.mdp='" . $mdp ."'";
     	$rs = $this->monPdo->query($req);
 		$ligne = $rs->fetch();
 		return $ligne;
 	}
+
+	public function getModifierVisiteurs()
+	{
+		$req="UPDATE visiteur SET nom=:nom, prenom=:prenom,login=:login,mdp=:mdp,adresse=:adresse,cp=:cp,ville=:ville,dateEmbauche=:dateEmbauche
+		WHERE id=:id";
+		$rs = $this->monPdo->prepare($req);
+		$ligne = $rs->fetch();
+		return $ligne;
+
+	}
+
+
 
 
 
@@ -86,6 +98,7 @@ class PdoGsb{
 */
 	public function majFraisForfait($idVisiteur, $mois, $lesFrais){
 		$lesCles = array_keys($lesFrais);
+
 		foreach($lesCles as $unIdFrais){
 			$qte = $lesFrais[$unIdFrais];
 			$req = "update lignefraisforfait set lignefraisforfait.quantite = $qte
@@ -197,6 +210,17 @@ class PdoGsb{
 		$laLigne = $res->fetch();
 		return $laLigne;
 	}
+
+	public function getListeVisiteur()
+	{
+		$req="SELECT * 
+		FROM visiteur";
+		$res=$this->monPdo->query($req);
+		$ligne = $res->fetchAll();
+		//dd($ligne);
+		return $ligne;
+			
+	}
 /**
  * Modifie l'état et la date de modification d'une fiche de frais
  
@@ -208,6 +232,11 @@ class PdoGsb{
 	public function majEtatFicheFrais($idVisiteur,$mois,$etat){
 		$req = "update ficheFrais set idEtat = '$etat', dateModif = now() 
 		where fichefrais.idvisiteur ='$idVisiteur' and fichefrais.mois = '$mois'";
+		$this->monPdo->exec($req);
+	}
+
+	public function ajouterVisiteur($nom, $prenom, $login, $mdp, $adresse, $cp , $ville , $dateEmbauche){
+		$req = "INSERT INTO visiteur (nom, prenom,login, mdp,adresse,cp, ville, dateEmbauche)values(:nom,:prenom,:login,:mdp,:adresse,:cp,:ville,:dateEmbauche)";
 		$this->monPdo->exec($req);
 	}
 

@@ -1,9 +1,9 @@
-<!--@extends ('modeles/visiteur')
+@extends ('modeles/gestionnaire')
  @section('contenu1')
 <div id = "contenu">
-    <h2>Identification utilisateur</h2>
+    <h2>Identification gestionnaire</h2>
 <form method = "post" action = "">
-        {{ csrf_field() }}  laravel va ajouter un champ caché avec un token 
+        {{ csrf_field() }} <!-- laravel va ajouter un champ caché avec un token -->
         @includeWhen($erreurs != null , 'msgerreurs', ['erreurs' => $erreurs]) 
         <p>
         <label for = "nom">Login*</label>
@@ -18,4 +18,4 @@
         </p>
     </form>
 </div>
-@endsection -->
+@endsection
