@@ -65,20 +65,45 @@ Route::post('sauvegarderFrais',[
         'uses'=>'gererFraisController@sauvegarderFrais'
 ]);
 
-Route::get('gererVisiteur',[
-        'as'=>'chemin_gererVisiteur',
-        'uses'=>'gererLesVisiteurs@afficherVisiteur'
+Route::any('gererVisiteur', [
+        'as' => 'chemin_gererVisiteur',
+        'uses' => 'gererLesVisiteurs@afficherVisiteur'
+    ]);
+    
+Route::get('infoVisiteur', [
+        'as' => 'chemin_infoVisiteur',
+        'uses' => 'gererLesVisiteurs@infoVisiteur'
 ]);
-
+Route::get('ajouterVisiteur',[
+        'as'=>'chemin_ajout',
+        'uses'=>'gererLesVisiteurs@nouveauVisiteur'
+]);
 
 Route::post('ajouterVisiteur',[
         'as'=>'chemin_ajouterVisiteur',
         'uses'=>'gererLesVisiteurs@ajouterVisiteur'
 ]);
 
-Route::post('modifierVisiteur', [
+Route::get('modifierVisiteur',[
         'as' =>'chemin_modifierVisiteur',
+        'uses' => 'gererLesVisiteurs@infoVisiteur'
+]);
+
+
+
+Route::post('modifierVisiteur',[
+        'as' =>'chemin_modifier',
         'uses' => 'gererLesVisiteurs@modifierVisiteur'
+]);
+
+Route::post('supprimerVisiteur', [
+        'as' =>'chemin_supprimerVisiteur',
+        'uses' => 'gererLesVisiteurs@supprimerVisiteur'
+]);
+
+Route::get('supprimerVisiteur', [
+        'as' =>'chemin_supprimer',
+        'uses' => 'gererLesVisiteurs@supprimer'
 ]);
 
 
