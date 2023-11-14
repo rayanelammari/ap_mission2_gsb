@@ -51,6 +51,9 @@
                     <a href="{{Route('chemin_ajout')}}">
                         <input type="submit" value="Ajouter">
                     </a>
+                    <a href="{{route('chemin_genererPdf')}}">
+                        <input type="submit" value="Télécharger en Pdf">
+                    </a>
         </div>
 
     @endsection 

@@ -6,6 +6,8 @@ use App\Facades\PdoGsb as FacadesPdoGsb;
 use App\MyApp\PdoGsb as MyAppPdoGsb;
 use Illuminate\Http\Request;
 use PdoGsb;
+use PDF;
+
 
 class gererLesVisiteurs extends Controller
 {
@@ -37,18 +39,8 @@ class gererLesVisiteurs extends Controller
 
             $idGestionnaire = $gestionnaire['id'];
             $id = $request['id'];
-            
-            $nom = $request['nom'];
-            $prenom = $request['prenom'];
-            $login = $request['login'];
-            $mdp = $request['mdp'];
-            $adresse = $request['adresse'];
-            $cp = $request['cp'];
-            $ville = $request['ville'];
-            $dateEmbauche = $request['dateEmbauche'];
-            
+                
             $infoVisiteur =PdoGsb::getInfoVisiteur($id);
-            $modifierVisiteur = PdoGsb::getModifierVisiteurs($id,$nom, $prenom, $login, $mdp, $adresse, $cp, $ville, $dateEmbauche);
             $Visiteurs = PdoGsb::getListeVisiteur();
 
 
@@ -56,7 +48,7 @@ class gererLesVisiteurs extends Controller
             $view = view('modifierVisiteur')
                     ->with('infoVisiteur',$infoVisiteur)
                     ->with('Visiteurs',$Visiteurs)
-                    ->with('modifierVisiteur', $modifierVisiteur)
+                    //->with('modifierVisiteur', $modifierVisiteur)
                     ->with('gestionnaire', $gestionnaire);
                    
             return $view;
@@ -96,6 +88,7 @@ class gererLesVisiteurs extends Controller
             $view = view('ListeVisiteur')
                     ->with('infoVisiteur',$infoVisiteur)
                     ->with('Visiteurs', $Visiteurs)
+                    ->with('modifierVisiteur', $modifierVisiteur)
                     ->with('gestionnaire', $gestionnaire);
                    
             return $view;
@@ -168,10 +161,13 @@ class gererLesVisiteurs extends Controller
             
             $gestionnaire = session('gestionnaire');
             $idGestionnaire = $gestionnaire['id'];
+            $id=$request['id'];
+            $infoVisiteur =PdoGsb::getInfoVisiteur($id);
 
             
 
             $view = view('supprimerVisiteur')
+                ->with('infoVisiteur', $infoVisiteur)
                 ->with('gestionnaire', $gestionnaire);
                  
             return $view;
@@ -198,7 +194,7 @@ class gererLesVisiteurs extends Controller
                     break;
                 }
             }
-            var_dump($visiteurExiste); 
+            //var_dump($visiteurExiste); 
 
             
     
@@ -209,13 +205,13 @@ class gererLesVisiteurs extends Controller
     
                 // Supprimer le visiteur
                 $supprimerVisiteur = PdoGsb::getSupprimerVisiteur($id);
-    
-                if (!$supprimerVisiteur) {
-                    return "Erreur lors de la suppression du visiteur.";
-                }
+
+                $Visiteurs = PdoGsb::getListeVisiteur();
+
     
                 $view = view('ListeVisiteur')
                     ->with('supprimerVisiteur', $supprimerVisiteur)
+                    ->with('Visiteurs',$Visiteurs)
                     ->with('gestionnaire', $gestionnaire);
     
                 return $view;
@@ -228,6 +224,25 @@ class gererLesVisiteurs extends Controller
             return view('connexionG')->with('erreurs', null);
         }
     }
+
+   
+    function genererPdfListeVisiteur() {
+        if(session('gestionnaire')!= null)
+        {
+            
+            $gestionnaire = session('gestionnaire');
+            $idGestionnaire = $gestionnaire['id'];
+            $Visiteurs = PdoGsb::getListeVisiteur();
+    
+        $pdf = PDF::loadView('listeVisiteurPdf', ['Visiteurs' => $Visiteurs, 'gestionnaire' => $gestionnaire]);
+        return $pdf->download('liste_visiteur.pdf');
+        }else {
+            return view('connexionG')->with('erreurs', null);
+        }
+    }
+    
+}
+
     
     
 
@@ -236,4 +251,4 @@ class gererLesVisiteurs extends Controller
         
     
        
-}
+

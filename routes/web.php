@@ -106,6 +106,11 @@ Route::get('supprimerVisiteur', [
         'uses' => 'gererLesVisiteurs@supprimer'
 ]);
 
+Route::get('genererPdf',[
+        'as' =>'chemin_genererPdf',
+        'uses'=>'gererLesVisiteurs@genererPdfListeVisiteur'
+]);
+
 
 
 

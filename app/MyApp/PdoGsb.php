@@ -34,15 +34,33 @@ class PdoGsb{
  * @param $mdp
  * @return l'id, le nom et le prénom sous la forme d'un tableau associatif 
 */
-	public function getInfosGestionnaire($login, $mdp){
-		$req = "select gestionnaire.id as id, gestionnaire.nom as nom, gestionnaire.prenom as prenom from gestionnaire 
-        where gestionnaire.login='" . $login . "' and gestionnaire.mdp='" . $mdp ."'";
-    	$rs = $this->monPdo->query($req);
-		$ligne = $rs->fetch();
-		return $ligne;
-	}
+public function getInfosGestionnaire($login, $mdp) {
+    $req = "SELECT gestionnaire.id as id, gestionnaire.nom as nom, gestionnaire.prenom as prenom FROM gestionnaire WHERE gestionnaire.login = :login AND gestionnaire.mdp = :mdp";
+    
+    $stmt = $this->monPdo->prepare($req);
+    $stmt->bindParam(':login', $login);
+    $stmt->bindParam(':mdp', $mdp);
+    $stmt->execute();
+    
+    $ligne = $stmt->fetch();
+    return $ligne;
+}
 
 
+public function getInfosVisiteur($login, $mdp,) {
+    $req = "SELECT visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom FROM visiteur WHERE visiteur.login = :login AND visiteur.mdp = :mdp";
+    
+    $stmt = $this->monPdo->prepare($req);
+    $stmt->bindParam(':login', $login);
+    $stmt->bindParam(':mdp', $mdp);
+    $stmt->execute();
+    
+    $ligne = $stmt->fetch();
+    return $ligne;
+
+
+
+}
 
 
 
@@ -54,16 +72,23 @@ class PdoGsb{
  * @param $mois sous la forme aaaamm
  * @return l'id, le libelle et la quantité sous la forme d'un tableau associatif 
 */
-	public function getLesFraisForfait($idVisiteur, $mois){
-		$req = "select fraisforfait.id as idfrais, fraisforfait.libelle as libelle, 
-		lignefraisforfait.quantite as quantite from lignefraisforfait inner join fraisforfait 
-		on fraisforfait.id = lignefraisforfait.idfraisforfait
-		where lignefraisforfait.idvisiteur ='$idVisiteur' and lignefraisforfait.mois='$mois' 
-		order by lignefraisforfait.idfraisforfait";	
-		$res = $this->monPdo->query($req);
-		$lesLignes = $res->fetchAll();
-		return $lesLignes; 
-	}
+public function getLesFraisForfait($idVisiteur, $mois) {
+    $req = "SELECT fraisforfait.id as idfrais, fraisforfait.libelle as libelle, 
+            lignefraisforfait.quantite as quantite 
+            FROM lignefraisforfait 
+            INNER JOIN fraisforfait ON fraisforfait.id = lignefraisforfait.idfraisforfait
+            WHERE lignefraisforfait.idvisiteur = :idVisiteur AND lignefraisforfait.mois = :mois
+            ORDER BY lignefraisforfait.idfraisforfait";
+
+    $stmt = $this->monPdo->prepare($req);
+    $stmt->bindParam(':idVisiteur', $idVisiteur);
+    $stmt->bindParam(':mois', $mois);
+    $stmt->execute();
+
+    $ligne = $stmt->fetchAll();
+    return $ligne;
+}
+
 /**
  * Retourne tous les id de la table FraisForfait
  
@@ -266,7 +291,7 @@ class PdoGsb{
 	
 	 public function getModifierVisiteurs($id,$nom, $prenom, $login, $mdp, $adresse, $cp, $ville, $dateEmbauche) {
 		$req = "UPDATE visiteur SET nom = :nom, prenom = :prenom, login=:login, mdp = :mdp, adresse = :adresse, cp = :cp, ville = :ville, dateEmbauche = :dateEmbauche WHERE id = :id";
-		echo($nom."-".$prenom."-".$login."-".$mdp."-".$adresse."-". $cp."-".$ville."-".$dateEmbauche."-".$id);
+		//echo($nom."-".$prenom."-".$login."-".$mdp."-".$adresse."-". $cp."-".$ville."-".$dateEmbauche."-".$id);
 		$stmt = $this->monPdo->prepare($req);
 		
 		$stmt->bindParam(':id', $id, PDO::PARAM_STR);
