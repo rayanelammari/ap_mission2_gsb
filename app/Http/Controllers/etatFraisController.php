@@ -22,7 +22,7 @@ class etatFraisController extends Controller
                         ->with('visiteur',$visiteur);
         }
         else{
-            return view('connexion')->with('erreurs',null);
+            return view('connexionG')->with('erreurs',null);
         }
 
     }
@@ -53,7 +53,7 @@ class etatFraisController extends Controller
             return $vue;
         }
         else{
-            return view('connexion')->with('erreurs',null);
+            return view('connexionG')->with('erreurs',null);
         }
     }
 }

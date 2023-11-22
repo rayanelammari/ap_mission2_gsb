@@ -9,13 +9,14 @@ use PdoGsb;
 use PDF;
 
 
+
 class gererLesVisiteurs extends Controller
 {
     function afficherVisiteur(Request $request){
        
         if( session('gestionnaire') != null){
             $gestionnaire = session('gestionnaire');
-            $idGestionnaire = $gestionnaire['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
             $Visiteurs = PdoGsb::getListeVisiteur();
             $view = view('ListeVisiteur')
                     ->with('Visiteurs', $Visiteurs)
@@ -37,8 +38,8 @@ class gererLesVisiteurs extends Controller
         {
             $gestionnaire = session('gestionnaire');
 
-            $idGestionnaire = $gestionnaire['id'];
-            $id = $request['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
+            htmlentities($id = $request['id']);
                 
             $infoVisiteur =PdoGsb::getInfoVisiteur($id);
             $Visiteurs = PdoGsb::getListeVisiteur();
@@ -48,7 +49,6 @@ class gererLesVisiteurs extends Controller
             $view = view('modifierVisiteur')
                     ->with('infoVisiteur',$infoVisiteur)
                     ->with('Visiteurs',$Visiteurs)
-                    //->with('modifierVisiteur', $modifierVisiteur)
                     ->with('gestionnaire', $gestionnaire);
                    
             return $view;
@@ -66,18 +66,18 @@ class gererLesVisiteurs extends Controller
 
             $gestionnaire = session('gestionnaire');
 
-            $idGestionnaire = $gestionnaire['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
 
-            $id = $request['id'];
+            htmlentities($id = $request['id']);
          
-            $nom = $request['nom'];
-            $prenom = $request['prenom'];
-            $login = $request['login'];
-            $mdp = $request['mdp'];
-            $adresse = $request['adresse'];
-            $cp = $request['cp'];
-            $ville = $request['ville'];
-            $dateEmbauche = $request['dateEmbauche'];
+            htmlentities($nom = $request['nom']);
+            htmlentities($prenom = $request['prenom']);
+            htmlentities($login = $request['login']);
+            htmlentities($mdp = $request['mdp']);
+            htmlentities($adresse = $request['adresse']);
+            htmlentities($cp = $request['cp']);
+            htmlentities($ville = $request['ville']);
+            htmlentities($dateEmbauche = $request['dateEmbauche']);
             
             $infoVisiteur =PdoGsb::getInfoVisiteur($id);
             $modifierVisiteur = PdoGsb::getModifierVisiteurs($id,$nom, $prenom, $login, $mdp, $adresse, $cp, $ville, $dateEmbauche);
@@ -225,21 +225,28 @@ class gererLesVisiteurs extends Controller
         }
     }
 
-   
-    function genererPdfListeVisiteur() {
-        if(session('gestionnaire')!= null)
-        {
-            
+    public function getPostPdf()
+    {
+ 
+        if( session('gestionnaire') != null){
             $gestionnaire = session('gestionnaire');
             $idGestionnaire = $gestionnaire['id'];
             $Visiteurs = PdoGsb::getListeVisiteur();
-    
-        $pdf = PDF::loadView('listeVisiteurPdf', ['Visiteurs' => $Visiteurs, 'gestionnaire' => $gestionnaire]);
-        return $pdf->download('liste_visiteur.pdf');
-        }else {
-            return view('connexionG')->with('erreurs', null);
+            // Générer le PDF
+            $pdf = PDF::loadView('listeVisiteurPdf', ['Visiteurs' => $Visiteurs]);
+
+            // Télécharger le PDF
+             return $pdf->download('liste_visiteurs.pdf');
+        }
+        
+        else{
+            return view('connexionG')->with('erreurs',null);
         }
     }
+
+   
+ 
+
     
 }
 

@@ -1,4 +1,4 @@
-@extends ('sommaire')
+@extends ('sommaireG')
     @section('contenu1')
       <div id="contenu">
         <h2>Mes fiches de frais</h2>

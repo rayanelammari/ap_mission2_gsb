@@ -6,19 +6,29 @@
         <div id="infosUtil">
         </div>  
         <ul id="menuList">
+            
             <li>
                 <strong>
                     @if(isset($gestionnaire))
                         Bonjour {{ $gestionnaire['nom'] . ' ' . $gestionnaire['prenom'] }}
                         <!-- ... Autres éléments spécifiques au gestionnaire ... -->
                         <li class="smenu">
-                            <a href="{{ route('chemin_gererVisiteur') }}" title="Gérer visiteur">Liste des visiteurs</a>
+                            <a href="{{ route('chemin_gererVisiteur') }}" title="Gérer visiteur">Gérer les visiteurs</a>
                         </li>
+                   
                     @elseif(isset($visiteur))
                         Bonjour {{ $visiteur['nom'] . ' ' . $visiteur['prenom'] }}
-                        <!-- ... Autres éléments spécifiques au visiteur ... -->
+                        <li class="smenu">
+                            <a href="{{ route('chemin_gestionFrais')}}" title="Saisie fiche de frais ">Saisie fiche de frais</a>
+                        </li>
+                         <li class="smenu">
+                            <a href="{{ route('chemin_selectionMois') }}" title="Consultation de mes fiches de frais">Mes fiches de frais</a>
+                        </li>
                     @else
-                        Bienvenue, Visiteur
+                        Bonjour {{ $comptable['nom'] . ' ' . $comptable['prenom'] }}
+                        <li class="smenu">
+                            <a href="{{ route('chemin_ficheFrais') }}" title="Consultation des visiteurs">Gérer fiche frais</a>
+                        </li>
                     @endif
                 </strong>
             </li>

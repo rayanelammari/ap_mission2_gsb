@@ -62,6 +62,22 @@ public function getInfosVisiteur($login, $mdp,) {
 
 }
 
+public function getInfosComptable($login, $mdp,) {
+    $req = "SELECT comptable.id as id, comptable.nom as nom, comptable.prenom as prenom FROM comptable WHERE comptable.login = :login AND comptable.mdp = :mdp";
+    
+    $stmt = $this->monPdo->prepare($req);
+    $stmt->bindParam(':login', $login);
+    $stmt->bindParam(':mdp', $mdp);
+    $stmt->execute();
+    
+    $ligne = $stmt->fetch();
+    return $ligne;
+
+
+
+}
+
+
 
 
 /**
@@ -192,6 +208,7 @@ public function getLesFraisForfait($idVisiteur, $mois) {
  * @return un tableau associatif de clé un mois -aaaamm- et de valeurs l'année et le mois correspondant 
 */
 	public function getLesMoisDisponibles($idVisiteur){
+		dd($idVisiteur);
 		$req = "select fichefrais.mois as mois from  fichefrais where fichefrais.idvisiteur ='$idVisiteur' 
 		order by fichefrais.mois desc ";
 		$res = $this->monPdo->query($req);
@@ -337,6 +354,7 @@ public function getLesFraisForfait($idVisiteur, $mois) {
 		return $stmt->fetch(PDO::FETCH_ASSOC); 
 	}
 
+	
 	public function getSupprimerVisiteur($id){
 		$req = "DELETE FROM visiteur where id=:id";
 		$rs = $this->monPdo->prepare($req);
@@ -359,16 +377,57 @@ public function getLesFraisForfait($idVisiteur, $mois) {
     $rs->execute();
 }
 
-	/*public function getModifierVisiteurs($id,$nom,$prenom,$login,$mdp,$adresse,$cp,$ville,$dateEmbauche)
-	{
-		$req="UPDATE visiteur SET nom=:nom, prenom=:prenom,login=:login,mdp=:mdp,adresse=:adresse,cp=:cp,ville=:ville,dateEmbauche=:dateEmbauche
-		WHERE id=:id";
-		$rs = $this->monPdo->prepare($req);
-		$ligne = $rs->fetchAll();
-		return $ligne;
 
-	}*/
 
+	//Comptable :
+
+	// public function getVisiteurNomPrenom($nomPrenom)
+    // {
+    //     $req = "SELECT prenom, nom FROM visiteur";
+    //     $rs = $this->monPdo->query($req);
+    //     // Fetch the results as an associative array
+    //     $result = $rs->fetchAll(PDO::FETCH_ASSOC);
+    //     return $result;
+    // }
+
+	
+	public function getListeFrais()
+{
+    $req = "SELECT idVisiteur,mois,idEtat FROM fichefrais";
+    $res = $this->monPdo->prepare($req);
+    $res->execute();
+    $ligne = $res->fetchAll();
+
+    return $ligne;
+}
+
+public function getInfoFrais($idV)
+{
+	$req ="SELECT * FROM fichefrais WHERE idVisiteur = :idVisiteur";
+	$stmt = $this->monPdo->prepare($req);
+	$stmt->bindParam(':idVisiteur', $idV);
+	$stmt->execute();
+	return $stmt->fetch(PDO::FETCH_ASSOC); 
+}
+	
+
+public function getModifFrais($idV, $mois, $nbJustificatifs, $montantValide, $dateModif, $idEtat)
+{
+
+ 
+       
+        $reqUpdateFicheFrais = "UPDATE fichefrais SET nbJustificatifs = :nbJustificatifs, montantValide=:montantValide, dateModif = :dateModif, idEtat = :idEtat WHERE idVisiteur = :idVisiteur AND mois = :mois";
+        $stmtUpdateFicheFrais = $this->monPdo->prepare($reqUpdateFicheFrais);
+        $stmtUpdateFicheFrais->bindParam(':idVisiteur', $idV, PDO::PARAM_STR);
+        $stmtUpdateFicheFrais->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $stmtUpdateFicheFrais->bindParam(':nbJustificatifs', $nbJustificatifs, PDO::PARAM_INT);
+        $stmtUpdateFicheFrais->bindParam(':montantValide', $montantValide, PDO::PARAM_INT);
+        $stmtUpdateFicheFrais->bindParam(':dateModif', $dateModif, PDO::PARAM_STR);
+        $stmtUpdateFicheFrais->bindParam(':idEtat', $idEtat, PDO::PARAM_STR);
+        $stmtUpdateFicheFrais->execute();
+
+    
+}
 
 
 

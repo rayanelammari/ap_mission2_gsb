@@ -53,7 +53,7 @@ Route::post('listeFrais',[
         'uses'=>'etatFraisController@voirFrais'
 ]);
 
-        /*-------------------- Use case gérer les frais---------------------------*/
+        /*-------------------- Users case gérer les frais---------------------------*/
 
 Route::get('gererFrais',[
         'as'=>'chemin_gestionFrais',
@@ -65,6 +65,7 @@ Route::post('sauvegarderFrais',[
         'uses'=>'gererFraisController@sauvegarderFrais'
 ]);
 
+/*-----------------Route gestionnaire--------------*/
 Route::any('gererVisiteur', [
         'as' => 'chemin_gererVisiteur',
         'uses' => 'gererLesVisiteurs@afficherVisiteur'
@@ -106,12 +107,30 @@ Route::get('supprimerVisiteur', [
         'uses' => 'gererLesVisiteurs@supprimer'
 ]);
 
-Route::get('genererPdf',[
-        'as' =>'chemin_genererPdf',
-        'uses'=>'gererLesVisiteurs@genererPdfListeVisiteur'
+ Route::get('genererPdf',[
+        'as' =>'chemin_genererPdf',         
+        'uses'=>'gererLesVisiteurs@getPostPdf'
+ ]);
+
+
+/*-----------Comptable*/
+Route::get('listeFicheFrais', [
+        'as' =>'chemin_ficheFrais',
+        'uses' => 'gererFicheFrais@afficheFrais'
+]);
+Route::get('infoFicheFrais', [
+        'as' =>'chemin_infoFicheFrais',
+        'uses' => 'gererFicheFrais@infoFrais'
 ]);
 
-
+Route::get('modifFicheFrais', [
+        'as' =>'chemin_modifFicheFrais',
+        'uses' => 'gererFicheFrais@infoFrais'
+]);
+Route::post('modifFicheFrais',[
+        'as' =>'chemin_modifierFrais',
+        'uses' => 'gererFicheFrais@modifierFicheFrais'
+]);
 
 
 

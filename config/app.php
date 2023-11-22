@@ -164,12 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         App\Providers\MyAppServiceProvider::class,
-
-        /*
-         * Package Service Providers...
-         */
         Barryvdh\DomPDF\ServiceProvider::class,
-
         /*
          * Application Service Providers...
          */
@@ -179,7 +174,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\MyPdoServiceProvider::class,
-        App\Providers\MyDateServiceProvider::class
+        App\Providers\MyDateServiceProvider::class,
+        // // Service Provider DomPDF
+	 
        
        
         
@@ -235,10 +232,23 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PdoGsb' => App\Facades\PdoGsb::class,
         'MyDate' => App\Facades\MyDate::class,
-        'MyApp' => App\Facades\MyApp::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class
-        
+        'PDF' => Barryvdh\DomPDF\Facade::class,    
+        'MyApp' => App\Facades\MyApp::class    
        
     ],
+
+    
+// 'aliases' => Facade::defaultAliases()->merge([
+
+// 	// Façade Laravel-dompdf
+// 	"PDF" => Barryvdh\DomPDF\Facade::class
+	
+// ])->toArray(),
+
+// PDF::setOptions([
+//     "defaultFont" => "Courier",
+//     "defaultPaperSize" => "a4",
+//     "dpi" => 130
+// ]),
 
 ];

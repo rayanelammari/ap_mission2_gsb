@@ -36,13 +36,14 @@ class connexionControllerG extends Controller
 
     public function validerG(Request $request)
     {
-        $login = $request->input('login');
-        $mdp = $request->input('mdp');
+        $login = $request['login'];
+        $mdp = $request['mdp'];
 
         $visiteur = PdoGsb::getInfosVisiteur($login, $mdp);
         $gestionnaire = PdoGsb::getInfosGestionnaire($login, $mdp);
+        $comptable = PdoGsb::getInfosComptable($login,$mdp);
 
-        if (!$visiteur && !$gestionnaire) {
+        if (!$visiteur && !$gestionnaire && !$comptable) {
             $erreurs[] = "Login ou mot de passe incorrect(s)";
             return view('connexionG')->with('erreurs', $erreurs);
         }
@@ -53,12 +54,16 @@ class connexionControllerG extends Controller
         } elseif ($gestionnaire) {
             session(['gestionnaire' => $gestionnaire]);
             return view('sommaireG')->with('gestionnaire', $gestionnaire);
+        }else
+        {
+            session(['comptable' => $comptable]);
+            return view('sommaireG')->with('comptable', $comptable);
         }
     }
 
     public function deconnecterG()
     {
-        session(['visiteur' => null, 'gestionnaire' => null]);
+        session(['visiteur' => null, 'gestionnaire' => null,'comptable'=>null]);
         return redirect()->route('chemin_connexionG');
     }
 }

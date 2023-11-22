@@ -16,6 +16,7 @@ class gererFraisController extends Controller{
                  PdoGsb::creeNouvellesLignesFrais($idVisiteur,$mois);
             }
             $lesFrais = PdoGsb::getLesFraisForfait($idVisiteur,$mois);
+            //dd($lesFrais);
             $view = view('majFraisForfait')
                     ->with('lesFrais', $lesFrais)
                     ->with('numMois',$anneeMois['numMois'])
@@ -27,7 +28,7 @@ class gererFraisController extends Controller{
             return $view;
         }
         else{
-            return view('connexion')->with('erreurs',null);
+            return view('connexionG')->with('erreurs',null);
         }
     }
     function sauvegarderFrais(Request $request){
@@ -62,7 +63,7 @@ class gererFraisController extends Controller{
                         ->with('message',$message);
         }
         else{
-            return view('connexion')->with('erreurs',null);
+            return view('connexionG')->with('erreurs',null);
         }
     }
 }

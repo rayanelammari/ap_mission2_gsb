@@ -1,4 +1,4 @@
-@extends ('sommaire')
+@extends ('sommaireG')
 @section('contenu1')
 
 <div id="contenu">
