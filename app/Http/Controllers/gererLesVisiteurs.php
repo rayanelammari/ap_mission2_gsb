@@ -6,7 +6,11 @@ use App\Facades\PdoGsb as FacadesPdoGsb;
 use App\MyApp\PdoGsb as MyAppPdoGsb;
 use Illuminate\Http\Request;
 use PdoGsb;
-use PDF;
+use Dompdf\Options;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\Controller;
+//use App\Your\Namespace\PdoGsb;
 
 
 
@@ -84,7 +88,7 @@ class gererLesVisiteurs extends Controller
             $Visiteurs = PdoGsb::getListeVisiteur();
 
             //dd($infoVisiteur);
-
+            
             $view = view('ListeVisiteur')
                     ->with('infoVisiteur',$infoVisiteur)
                     ->with('Visiteurs', $Visiteurs)
@@ -108,7 +112,7 @@ class gererLesVisiteurs extends Controller
         {
             
             $gestionnaire = session('gestionnaire');
-            $idGestionnaire = $gestionnaire['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
 
             
 
@@ -129,16 +133,17 @@ class gererLesVisiteurs extends Controller
         if(session('gestionnaire') != null){
 
             $gestionnaire = session('gestionnaire');
-            //$idGestionnaire = $gestionnaire['id'];
-            $id = $request['idVisiteur'];
-            $nom =  $request['nom'];
-            $prenom =  $request['prenom'];
-            $login = $request['login'];
-            $mdp = $request['mdp'];
-            $adresse = $request['adresse'];
-            $cp = $request['cp'];
-            $ville = $request['ville'];
-            $dateEmbauche = $request['dateEmbauche'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
+            htmlentities($id = $request['idVisiteur']);
+            htmlentities($nom =  $request['nom']);
+            htmlentities($prenom =  $request['prenom']);
+            htmlentities($login = $request['login']);
+            htmlentities($mdp = password_hash($request['mdp'], PASSWORD_DEFAULT));
+            htmlentities($adresse = $request['adresse']);
+            htmlentities($cp = $request['cp']);
+            htmlentities($ville = $request['ville']);
+
+            htmlentities($dateEmbauche = $request['dateEmbauche']);
             $Visiteurs = PdoGsb::getListeVisiteur();
             $ajouterVisiteur = PdoGsb::getAjouterVisiteur($id,$nom, $prenom, $login, $mdp, $adresse, $cp , $ville , $dateEmbauche);
             $view = view('ListeVisiteur')
@@ -160,8 +165,8 @@ class gererLesVisiteurs extends Controller
         {
             
             $gestionnaire = session('gestionnaire');
-            $idGestionnaire = $gestionnaire['id'];
-            $id=$request['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
+            htmlentities($id=$request['id']);
             $infoVisiteur =PdoGsb::getInfoVisiteur($id);
 
             
@@ -182,14 +187,14 @@ class gererLesVisiteurs extends Controller
     {
         if (session('gestionnaire') != null) {
             $gestionnaire = session('gestionnaire');
-            $idGestionnaire = $gestionnaire['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
     
-            $id = $request['id'];
+            htmlentities($id = $request['id']);
     
             $Visiteurs = PdoGsb::getListeVisiteur();
             $visiteurExiste = false;
             foreach ($Visiteurs as $info) {
-                if (!empty($info['id']) && $info['id'] == $id) {
+                if (!empty(htmlentities($info['id'])) && htmlentities($info['id']) == $id) {
                     $visiteurExiste = true;
                     break;
                 }
@@ -225,22 +230,27 @@ class gererLesVisiteurs extends Controller
         }
     }
 
-    public function getPostPdf()
-    {
- 
-        if( session('gestionnaire') != null){
+    function genererPdfListeVisiteur() {
+        if(session('gestionnaire')!= null)
+        {
+            
             $gestionnaire = session('gestionnaire');
-            $idGestionnaire = $gestionnaire['id'];
+            htmlentities($idGestionnaire = $gestionnaire['id']);
             $Visiteurs = PdoGsb::getListeVisiteur();
-            // Générer le PDF
-            $pdf = PDF::loadView('listeVisiteurPdf', ['Visiteurs' => $Visiteurs]);
+            
+            $options= new Options();
 
-            // Télécharger le PDF
-             return $pdf->download('liste_visiteurs.pdf');
-        }
-        
-        else{
-            return view('connexionG')->with('erreurs',null);
+            $dompdf=new Dompdf($options);
+
+
+        $html = View::make('listeVisiteurPdf', ['Visiteurs' => $Visiteurs, 'gestionnaire' => $gestionnaire])->render();
+        $dompdf->loadHtml($html);
+
+        $dompdf->render();
+
+        return $dompdf->stream('liste_visiteur.pdf');
+        }else {
+            return view('connexionG')->with('erreurs', null);
         }
     }
 

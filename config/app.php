@@ -164,7 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         App\Providers\MyAppServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
+        //Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -231,9 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PdoGsb' => App\Facades\PdoGsb::class,
-        'MyDate' => App\Facades\MyDate::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,    
-        'MyApp' => App\Facades\MyApp::class    
+        'MyDate' => App\Facades\MyDate::class  
        
     ],
 

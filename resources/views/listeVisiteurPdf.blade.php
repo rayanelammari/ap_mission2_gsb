@@ -1,19 +1,26 @@
-@extends ('sommaireG')
-    @section('contenu1')
-      <div id="contenu">
+<div id="contenu">
                
 
         <h2>Liste des visiteurs :</h2>
         <h3>Sélectionner un visiteur :</h3>
 
         <table class="table table-responsive">
-            @foreach($Visiteurs as $unVisiteur)
+            <thead>
                 <tr>
-                    <td>{{ $unVisiteur['id'] }}</td>
-                    <td>{{ $unVisiteur['nom'] }}</td>
-                    <td>{{ $unVisiteur['prenom'] }}</td>
+                    <th>id</th>
+                    <th>nom</th>
+                     <th>prenom</th>
                 </tr>
-            @endforeach
+            </thead>
+            <tbody>
+                @foreach($Visiteurs as $unVisiteur)
+                    <tr>
+                        <td>{{ $unVisiteur['id'] }}</td></br>
+                        <td>{{ $unVisiteur['nom'] }}</td>
+                        <td>{{ $unVisiteur['prenom'] }}</td></br>
+                    </tr>
+                @endforeach
+            </tbody>
+
         </table>
-        
-    @endsection 
+</div>

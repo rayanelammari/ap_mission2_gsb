@@ -24,12 +24,8 @@
                          <li class="smenu">
                             <a href="{{ route('chemin_selectionMois') }}" title="Consultation de mes fiches de frais">Mes fiches de frais</a>
                         </li>
-                    @else
-                        Bonjour {{ $comptable['nom'] . ' ' . $comptable['prenom'] }}
-                        <li class="smenu">
-                            <a href="{{ route('chemin_ficheFrais') }}" title="Consultation des visiteurs">Gérer fiche frais</a>
-                        </li>
                     @endif
+                
                 </strong>
             </li>
             <li class="smenu">

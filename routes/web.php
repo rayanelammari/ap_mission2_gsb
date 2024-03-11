@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -109,7 +110,7 @@ Route::get('supprimerVisiteur', [
 
  Route::get('genererPdf',[
         'as' =>'chemin_genererPdf',         
-        'uses'=>'gererLesVisiteurs@getPostPdf'
+        'uses'=>'gererLesVisiteurs@genererPdfListeVisiteur'
  ]);
 
 
@@ -131,6 +132,7 @@ Route::post('modifFicheFrais',[
         'as' =>'chemin_modifierFrais',
         'uses' => 'gererFicheFrais@modifierFicheFrais'
 ]);
+
 
 
 

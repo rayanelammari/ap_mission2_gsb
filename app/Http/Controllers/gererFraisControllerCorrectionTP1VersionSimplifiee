@@ -8,6 +8,7 @@ class gererFraisController extends Controller{
 
     function saisirFrais(Request $request){
         if( session('visiteur') != null){
+        
             $visiteur = session('visiteur');
             $idVisiteur = $visiteur['id'];
             $anneeMois = MyDate::getAnneeMoisCourant();

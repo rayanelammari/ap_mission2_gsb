@@ -208,7 +208,6 @@ public function getLesFraisForfait($idVisiteur, $mois) {
  * @return un tableau associatif de clé un mois -aaaamm- et de valeurs l'année et le mois correspondant 
 */
 	public function getLesMoisDisponibles($idVisiteur){
-		dd($idVisiteur);
 		$req = "select fichefrais.mois as mois from  fichefrais where fichefrais.idvisiteur ='$idVisiteur' 
 		order by fichefrais.mois desc ";
 		$res = $this->monPdo->query($req);
@@ -429,6 +428,14 @@ public function getModifFrais($idV, $mois, $nbJustificatifs, $montantValide, $da
     
 }
 
+// public function getListeVisiteur()
+// {
+// 	$req = "SELECT id, nom, prenom FROM visiteur";
+// 	$res = $this->monPdo->prepare($req);
+// 	$res->execute();
+// 	$ligne = $res->fetchAll();
 
+// 	return $ligne;
+// }
 
 }
