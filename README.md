@@ -1,1 +1,1 @@
-# gsb-laravel-master
+# Gsb
